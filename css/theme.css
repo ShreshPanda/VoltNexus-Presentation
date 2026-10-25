@@ -1,0 +1,50 @@
+/* VoltNexus in the I/O language: bright, geometric, springy */
+:root{--bg:#F5F5F7;--card:#FBFBFC;--ink:#1D1D1F;--g1:#333333;--g2:#8A8A8E;--line:#E3E3E6;
+  --b:#2D4F4F;--y:#C5B358;--gr:#6F8F8A;--c:#3E3E42;
+  --bt:#DCE6E4;--yt:#EFEAD3;--grt:#E5ECEA;--ct:#E8E8EA;
+  --spring:cubic-bezier(.34,1.45,.64,1);--glide:cubic-bezier(.65,0,.25,1);--out:cubic-bezier(.2,.8,.2,1);
+  --f:"Google Sans","Product Sans",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;}
+.slide-meta{display:none !important;}
+.slide-canvas.io{padding:0 !important;overflow:hidden;background:var(--bg) !important;}
+.slide-canvas.io > .slide-body{position:absolute !important;inset:0 !important;padding:0 !important;margin:0 !important;display:block !important;}
+.io .scene{position:absolute;inset:0;font-family:var(--f);-webkit-font-smoothing:antialiased;}
+.io p,.io h1,.io h2{margin:0 !important;font-family:var(--f) !important;}
+
+/* type */
+.io .eb{position:absolute;left:0;right:0;top:86px;text-align:center;z-index:5;}
+.io .chip{display:inline-block;padding:9px 18px;border-radius:999px;background:var(--card);box-shadow:0 1px 2px rgba(29,29,31,.12),0 2px 8px rgba(29,29,31,.08);font-size:15px !important;font-weight:500 !important;color:var(--ink) !important;line-height:1 !important;}
+.io .chip i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:10px;vertical-align:1px;background:var(--b);}
+.io .h{position:absolute;left:100px;right:100px;text-align:center;font-size:66px !important;font-weight:500 !important;letter-spacing:-1.5px !important;line-height:1.08 !important;color:var(--ink) !important;z-index:5;}
+.io .h.xl{font-size:104px !important;letter-spacing:-3px !important;}
+.io .h.md{font-size:54px !important;letter-spacing:-1.2px !important;}
+.io .h .hb,.io .h .hg,.io .h .hc{color:var(--b);}.io .h .hy{color:#9E8C3A;}
+.io .s{position:absolute;left:230px;right:230px;text-align:center;font-size:24px !important;font-weight:400 !important;line-height:1.45 !important;color:var(--g1) !important;z-index:5;}
+
+/* reveal: nothing shows until the frame is live; then text wipes up and shapes spring in */
+#mainScroll .io:not(.live) .a,#mainScroll .io:not(.live) .shp,#mainScroll .io:not(.live) .f,#mainScroll .io:not(.live) .orb{opacity:0 !important;}
+@keyframes wipe{from{opacity:0;transform:translateY(28px);clip-path:inset(0 0 100% 0)}to{opacity:1;transform:none;clip-path:inset(0 0 -20% 0)}}
+@keyframes pop{0%{opacity:0;transform:translate(var(--dx,0),var(--dy,0)) scale(.2) rotate(calc(var(--r,0deg) - 50deg))}100%{opacity:1;transform:rotate(var(--r,0deg))}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -10px}}
+.live .a{animation:wipe .9s calc(.25s + var(--i,0)*.12s) var(--out) both;}
+.live .f{animation:fade 1s calc(.2s + var(--i,0)*.12s) ease both;}
+
+/* geometric shapes */
+.io .shp{position:absolute;display:block;transform:rotate(var(--r,0deg));z-index:1;}
+.live .shp{animation:pop 1s calc(.05s + var(--i,0)*.07s) var(--spring) both,bob var(--bd,7s) calc(1.2s + var(--i,0)*.3s) ease-in-out infinite;}
+.io .shp.circle{border-radius:50%;}
+.io .shp.ring{border-radius:50%;box-sizing:border-box;border:var(--bw,14px) solid currentColor;background:none !important;}
+.io .shp.pill{border-radius:999px;}
+.io .shp.q{border-radius:100% 0 0 0;}
+.io .shp.half{border-radius:999px 999px 0 0;}
+.io .shp.dots{background:radial-gradient(currentColor 2.2px,transparent 2.6px) 0 0/22px 22px !important;}
+.io .shp.sq{border-radius:22%;}
+.io .shp svg{width:100%;height:100%;overflow:visible;}
+
+/* the hero circle glides from where it sat on the previous frame */
+.io .orb{position:absolute;border-radius:50%;background:var(--b);z-index:0;
+  left:calc(var(--x) - var(--d)/2);top:calc(var(--y) - var(--d)/2);width:var(--d);height:var(--d);}
+@keyframes orb{from{left:calc(var(--px) - var(--pd)/2);top:calc(var(--py) - var(--pd)/2);width:var(--pd);height:var(--pd)}}
+.live .orb{animation:orb 1.25s var(--glide) both;}
+.io .orb.first{animation:none;}
+.live .orb.first{animation:pop 1.2s var(--spring) both;}
